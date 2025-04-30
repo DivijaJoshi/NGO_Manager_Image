@@ -1,5 +1,179 @@
 # NGO_Manager_Image
 Image For Copy Right
+
+
+```
+  graph TD
+    %% Styling Definitions
+    classDef external fill:#FFE5D9,stroke:#FF7043,stroke-width:2px
+    classDef process fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    classDef database fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
+    classDef subgraphStyle fill:#F5F5F5,stroke:#9E9E9E,stroke-width:2px
+    classDef flow fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px
+
+    %% External Entities
+    User((User))
+    Admin((Admin))
+    EmailService[[Email Service]]
+
+    %% Data Stores
+    UserStore[(User DB)]
+    TaskStore[(Task DB)]
+    EventStore[(Event DB)]
+    IdeaStore[(Idea DB)]
+    NotificationStore[(Notification DB)]
+    DomainStore[(Domain DB)]
+
+    %% Smart Matching System
+    subgraph SmartMatching
+        direction TB
+        InputProcessing[Input Processing]
+        DomainMatching[Domain Matching]
+        WorkloadAnalysis[Workload Analysis]
+        ProfileAnalysis[Profile Analysis]
+        ScoringSystem[Scoring System]
+        MatchGeneration[Match Generation]
+        
+        InputProcessing -.-> DomainMatching
+        InputProcessing -.-> ProfileAnalysis
+        InputProcessing -.-> WorkloadAnalysis
+        DomainMatching -.-> ScoringSystem
+        ProfileAnalysis -.-> ScoringSystem
+        WorkloadAnalysis -.-> ScoringSystem
+        ScoringSystem -.-> MatchGeneration
+    end
+
+    %% Authentication Flow
+    subgraph Authentication
+        direction TB
+        Login[Login]
+        Register[Register]
+        ProfileUpdate[Profile Update]
+        TokenValidation[Token Validation]
+        
+        Login -.-> TokenValidation
+        Register -.-> UserStore
+        ProfileUpdate -.-> UserStore
+        TokenValidation -.-> AuthProcess
+    end
+
+    %% Task Management Flow
+    subgraph TaskManagement
+        direction TB
+        TaskCreate[Create Task]
+        TaskAssign[Assign Task]
+        TaskUpdate[Update Status]
+        SmartMatch[Smart Match]
+        
+        TaskCreate -.-> TaskStore
+        UserStore -.-> SmartMatch
+        SmartMatch -.-> TaskAssign
+        TaskAssign -.-> TaskStore
+        TaskUpdate -.-> TaskStore
+        TaskUpdate -.-> NotificationProcess
+    end
+
+    %% Notification Flow
+    subgraph Notifications
+        direction TB
+        NotifGenerate[Generate]
+        BirthdayNotif[Birthday]
+        TaskNotif[Task]
+        EventNotif[Event]
+        
+        UserStore -.-> BirthdayNotif
+        TaskStore -.-> TaskNotif
+        EventStore -.-> EventNotif
+        BirthdayNotif -.-> NotifGenerate
+        TaskNotif -.-> NotifGenerate
+        EventNotif -.-> NotifGenerate
+        NotifGenerate -.-> NotificationStore
+    end
+
+    %% Analytics Flow
+    subgraph Analytics
+        direction TB
+        ETL[Process]
+        AnalyticsProcess[Analyze]
+        Visualization[Dashboard]
+        
+        UserStore -.-> ETL
+        TaskStore -.-> ETL
+        EventStore -.-> ETL
+        IdeaStore -.-> ETL
+        ETL -.-> AnalyticsProcess
+        AnalyticsProcess -.-> Visualization
+        Visualization -.-> User
+        Visualization -.-> Admin
+    end
+
+    %% Main Processes
+    AuthProcess[Auth]
+    TaskProcess[Tasks]
+    EventProcess[Events]
+    IdeaProcess[Ideas]
+    NotificationProcess[Notify]
+    ReportingProcess[Reports]
+
+    %% Main Flow Connections
+    User -.->|Login| AuthProcess
+    AuthProcess -.->|Token| User
+    AuthProcess -.->|Validate| UserStore
+    UserStore -.->|Profile| AuthProcess
+
+    User -.->|Tasks| TaskProcess
+    Admin -.->|Assign| TaskProcess
+    TaskProcess -.->|Store| TaskStore
+    TaskStore -.->|Info| TaskProcess
+    TaskProcess -.->|Notify| NotificationProcess
+    UserStore -.->|Skills| TaskProcess
+    TaskProcess -.->|Matches| User
+
+    User -.->|Events| EventProcess
+    EventProcess -.->|Store| EventStore
+    EventStore -.->|Info| EventProcess
+    EventProcess -.->|Notify| NotificationProcess
+    EventProcess -.->|Updates| User
+
+    User -.->|Ideas| IdeaProcess
+    IdeaProcess -.->|Store| IdeaStore
+    IdeaStore -.->|Info| IdeaProcess
+    IdeaProcess -.->|Updates| User
+
+    NotificationProcess -.->|Alerts| User
+    NotificationProcess -.->|Store| NotificationStore
+    NotificationStore -.->|Data| NotificationProcess
+    NotificationProcess -.->|Emails| EmailService
+    EmailService -.->|Status| NotificationProcess
+
+    Admin -.->|Reports| ReportingProcess
+    ReportingProcess -.->|Data| Admin
+    UserStore -.->|Activity| ReportingProcess
+    TaskStore -.->|Stats| ReportingProcess
+    EventStore -.->|Stats| ReportingProcess
+    IdeaStore -.->|Stats| ReportingProcess
+
+    User -.->|Profile| AuthProcess
+    DomainStore -.->|Info| TaskProcess
+    AuthProcess -.->|Domains| DomainStore
+
+    %% Smart Matching Connections
+    TaskProcess -.->|Task Data| InputProcessing
+    UserStore -.->|User Data| InputProcessing
+    TaskStore -.->|Task History| InputProcessing
+    MatchGeneration -.->|Matches| SmartMatch
+    DomainStore -.->|Domain Info| DomainMatching
+
+    %% Apply Styling
+    class User,Admin,EmailService external
+    class AuthProcess,TaskProcess,EventProcess,IdeaProcess,NotificationProcess,ReportingProcess process
+    class UserStore,TaskStore,EventStore,IdeaStore,NotificationStore,DomainStore database
+    class Authentication,TaskManagement,Notifications,Analytics,SmartMatching subgraphStyle
+    class Login,Register,ProfileUpdate,TokenValidation,TaskCreate,TaskAssign,TaskUpdate,SmartMatch,NotifGenerate,BirthdayNotif,TaskNotif,EventNotif,ETL,AnalyticsProcess,Visualization,InputProcessing,DomainMatching,WorkloadAnalysis,ProfileAnalysis,ScoringSystem,MatchGeneration flow
+
+    %% Layout Adjustments
+    linkStyle default interpolate basis
+```
 ___
 
 https://divijajoshi.github.io/NGO_Manager_Image/
